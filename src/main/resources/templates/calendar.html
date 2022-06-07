@@ -42,11 +42,13 @@
 
                 //일정 클릭 시 이벤트
                 eventClick: function (arg) {
+                    window.alert("구글 캘린더에 해당 일정을 예약합니다.");
                     // opens events in a popup window
                     var month = arg.event.start.getMonth();
                     var date = arg.event.start.getDate();
                     var str_month = month;
                     var str_date = date;
+                    window.alert("구글 캘린더에 2022년 " + month + "월 " + date + "일 일정을 예약합니다.");
                     if (month < 10) {
                         str_month = "0" + month;
                     }
@@ -108,6 +110,7 @@
 
 <div id='loading'>loading...</div>
 <div id='calendar'></div>
+<input type='hidden' name='date' value='"+bufferedWKT+"' />
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

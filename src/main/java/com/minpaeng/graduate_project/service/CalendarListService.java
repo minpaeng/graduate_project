@@ -10,6 +10,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.client.util.Value;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class CalendarListService {
     /** Application name. */
-    private static final String APPLICATION_NAME = "Google Calendar Test";
+    private static final String APPLICATION_NAME = "구글 일정 예약";
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     /** Directory to store authorization tokens for this application. */
@@ -36,7 +37,7 @@ public class CalendarListService {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "/파일명.json";
+    private static final String CREDENTIALS_FILE_PATH = "/client_secret_967060435626-vtut4qrjvqok1cs7628rkj4fi7urupmd.apps.googleusercontent.com.json";
 
     /**
      * Creates an authorized Credential object.
@@ -85,7 +86,7 @@ public class CalendarListService {
         }
     }
 
-    public String insertEvent(String accessToken, String calendarId) throws IOException, GeneralSecurityException {
+    public String insertEvent(String calendarId) throws IOException, GeneralSecurityException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)

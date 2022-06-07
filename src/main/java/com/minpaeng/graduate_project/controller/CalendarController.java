@@ -38,11 +38,15 @@ public class CalendarController {
         JSONArray itemArr = (JSONArray) calendarListJsonObject.get("items");
 
         //결과 출력
-        JSONObject item = (JSONObject)itemArr.get(0);
-        System.out.println("Calender name"+" ("+item.get("id")+") : "+item.get("summary").toString());
+        try {
+            JSONObject item = (JSONObject)itemArr.get(0);
+            System.out.println("Calender name"+" ("+item.get("id")+") : "+item.get("summary").toString());
 
-        String url = calendarListService.insertEvent(accessToken, item.get("id").toString());
-        System.out.println(url);
-        return "redirect:" + url;
+            String url = calendarListService.insertEvent(item.get("id").toString());
+            System.out.println(url);
+            return "redirect:" + url;
+        } catch (Exception e) {
+            return "error";
+        }
     }
 }
