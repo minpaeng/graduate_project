@@ -1,10 +1,10 @@
 package com.minpaeng.graduate_project.controller;
 
-import com.minpaeng.graduate_project.service.CalendarListService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.minpaeng.graduate_project.dto.AppointmentResponseDto;
+import com.minpaeng.graduate_project.service.AppointmentService;
 import com.minpaeng.graduate_project.service.CalendarService;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,40 +13,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiredArgsConstructor
 @Controller
 public class CalendarController {
-    @GetMapping("/callback")
-    public String callback(@RequestParam(name = "code") String code, Model model) throws GeneralSecurityException, IOException {
-        CalendarService calendarService = new CalendarService();
-        String accessTokenJsonData = calendarService.getAccessTokenJsonData(code);
+    private final CalendarService calendarService;
+    private final AppointmentService appointmentService;
 
-        JSONObject accessTokenjsonObject = new JSONObject(accessTokenJsonData);
+    // 일정 데이터 삽입
+    @GetMapping("/insert")
+    public String insert(@RequestParam(name = "date")String date) throws GeneralSecurityException, IOException {
+        System.out.println("전달받은 날짜: " + date);
+        String calendarId = calendarService.getCalendarList();
+        String url = calendarService.insertEvent(calendarId, date);
+        return "redirect:" + url;
+    }
 
-        String accessToken = accessTokenjsonObject.get("access_token").toString();
-        System.out.println(accessToken);
+    @GetMapping("/calendar")
+    public String showIndex(@RequestParam(name = "group_id") Long groupId,
+                            @RequestParam(name = "date") String date,
+                            @RequestParam(name = "time") String time,
+                            Model model) throws JsonProcessingException {
 
-        // Get CalendarList
-        CalendarListService calendarListService = new CalendarListService();
-        String calendarListJsonData = calendarListService.getCalendarList(accessToken);
-        if(calendarListJsonData=="error") return "error";
-        else System.out.println("CalendarList Json Data : " + calendarListJsonData);
+        List<AppointmentResponseDto> responseDto =
+                appointmentService.findAppointments(groupId, date, time);
 
-        JSONObject calendarListJsonObject = new JSONObject(calendarListJsonData);
-        JSONArray itemArr = (JSONArray) calendarListJsonObject.get("items");
-
-        //결과 출력
-        try {
-            JSONObject item = (JSONObject)itemArr.get(0);
-            System.out.println("Calender name"+" ("+item.get("id")+") : "+item.get("summary").toString());
-
-            String url = calendarListService.insertEvent(item.get("id").toString());
-            System.out.println(url);
-            return "redirect:" + url;
-        } catch (Exception e) {
-            return "error";
+        //resultDate 값만 뽑아서 List로 만들기
+        List<String> resultDate = new ArrayList<>();
+        for(AppointmentResponseDto x : responseDto) {
+            resultDate.add(x.getResultDate());
         }
+
+        model.addAttribute("appointments", resultDate);
+        return "calendar";
     }
 }

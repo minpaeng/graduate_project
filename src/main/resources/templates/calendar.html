@@ -42,28 +42,20 @@
 
                 //일정 클릭 시 이벤트
                 eventClick: function (arg) {
-                    window.alert("구글 캘린더에 해당 일정을 예약합니다.");
                     // opens events in a popup window
-                    var month = arg.event.start.getMonth();
+                    var month = (arg.event.start.getMonth() + 1);
                     var date = arg.event.start.getDate();
                     var str_month = month;
                     var str_date = date;
-                    window.alert("구글 캘린더에 2022년 " + month + "월 " + date + "일 일정을 예약합니다.");
                     if (month < 10) {
                         str_month = "0" + month;
                     }
                     if (date < 10) {
                         str_date = "0" + date;
                     }
+                    window.alert("구글 캘린더에 2022년 " + str_month + "월 " + str_date + "일 일정을 예약합니다.");
                     var datetime = "2022-" + str_month + "-" + str_date;
-                    var url = "https://accounts.google.com/o/oauth2/v2/auth" +
-                        "?scope=https://www.googleapis.com/auth/calendar" +
-                        "&access_type=offline" +
-                        "&include_granted_scopes=true" +
-                        "&response_type=code" +
-                        "&state=state_parameter_passthrough_value" +
-                        "&redirect_uri=http://localhost:8080/callback" +
-                        "&client_id=967060435626-cs4uf2d3fg0o9odnf4mtvp6q7a3ebe17.apps.googleusercontent.com"
+                    var url = "http://localhost:8080/insert?date=" + datetime;
                     window.open(url, '_parent', 'width=700,height=600');
                     //window.alert(arg.event.title + " 일정이 삭제되었습니다.")
                     //arg.event.remove()
