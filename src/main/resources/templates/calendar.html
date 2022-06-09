@@ -6,14 +6,40 @@
     <link href='css/main.css' rel='stylesheet' />
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function() {
+            var colors = ["#FFA7A7", "#002266", "#ABF200", "#FFBB00", "#8041D9", "#FFA7A7", "#008299"]
+            var mmap = new Map();
 
-            var appointment = [];
-            appointment = [[${appointments}]];
+            var speakersDate = [];
+            speakersDate = [[${speakersDate}]];
+
+            var speakers = [];
+            speakers = [[${speakers}]]
+
+            var speakersTime = [];
+            speakersTime = [[${speakersTime}]];
             var list = [];
 
-            appointment.forEach(function (ele, idx) {
+            var appointmentDate = [[${appointmentDate}]]
+            var appointmentTime = [[${appointmentTime}]]
+
+            var r = 0;
+            speakersDate.forEach(function (ele, idx) {
+                if (!mmap.has(speakers[idx])) {
+                    mmap.set(speakers[idx], r);
+                    r++;
+                }
+
                 list.push({
-                    title: (idx + 1) + "순위",
+                    title: speakers[idx] + ": " + speakersTime[idx],
+                    start: ele,
+                    end: ele,
+                    color: colors[mmap.get(speakers[idx])]
+                })
+            })
+
+            appointmentDate.forEach(function (ele, idx) {
+                list.push({
+                    title: idx + "순위 결과: " + appointmentTime[idx],
                     start: ele,
                     end: ele
                 })
@@ -31,7 +57,7 @@
                 },
 
                 headerToolbar: {
-                    left: 'prevYear,prev,next,nextYear today',
+                    left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,listYear'
                 },
