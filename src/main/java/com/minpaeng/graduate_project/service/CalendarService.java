@@ -41,7 +41,7 @@ public class CalendarService {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "/client_secret_967060435626-vtut4qrjvqok1cs7628rkj4fi7urupmd.apps.googleusercontent.com.json";
+    private static final String CREDENTIALS_FILE_PATH = "/클라이언트시크릿파일명.json";
 
     /**
      * Creates an authorized Credential object.
